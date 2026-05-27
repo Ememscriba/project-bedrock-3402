@@ -76,7 +76,7 @@ resource "aws_db_instance" "postgres" {
   engine                 = "postgres"
   engine_version         = "15.8"
   instance_class         = "db.t4g.micro"
-  db_name                = "catalog"
+  db_name                = "retailcatalog"
   username               = "retail_admin"
   password               = aws_ssm_parameter.postgres_pass.value
   db_subnet_group_name   = aws_db_subnet_group.db_subnets.name

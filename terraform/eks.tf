@@ -87,7 +87,7 @@ resource "aws_eks_node_group" "bedrock_nodes" {
     min_size     = 1
   }
 
-  instance_types = ["t3.medium"]
+  instance_types = ["t3.small"]
 
   depends_on = [
     aws_iam_role_policy_attachment.node_worker_policy,

@@ -74,7 +74,7 @@ resource "aws_eks_cluster" "bedrock" {
 
 resource "aws_eks_node_group" "bedrock_nodes" {
   cluster_name    = aws_eks_cluster.bedrock.name
-  node_group_name = "project-bedrock-node-group"
+  node_group_name = "project-bedrock-node-group-v1"
   node_role_arn   = aws_iam_role.nodes.arn
   subnet_ids      = [
     aws_subnet.private_1.id,
@@ -88,6 +88,10 @@ resource "aws_eks_node_group" "bedrock_nodes" {
   }
 
   instance_types = ["t3.medium"]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 
   depends_on = [
     aws_iam_role_policy_attachment.node_worker_policy,

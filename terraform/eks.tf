@@ -76,6 +76,7 @@ resource "aws_eks_node_group" "bedrock_nodes" {
   cluster_name    = aws_eks_cluster.bedrock.name
   node_group_name = "project-bedrock-node-group-v1"
   node_role_arn   = aws_iam_role.nodes.arn
+  capacity_type   = "ON_DEMAND"
   subnet_ids      = [
     aws_subnet.private_1.id,
     aws_subnet.private_2.id

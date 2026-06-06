@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: retail-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui
+  namespace: retail-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui
+  template:
+    metadata:
+      labels:
+        app: ui
+    spec:
+      containers:
+        - name: ui
+          image: public.ecr.aws/aws-containers/retail-store-sample-ui:0.7.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENDPOINTS_CATALOG
+              value: "http://catalog:8080"
+            - name: ENDPOINTS_CARTS
+              value: "http://carts:8080"
+            - name: ENDPOINTS_ORDERS
+              value: "http://orders:8080"
+            - name: ENDPOINTS_CHECKOUT
+              value: "http://checkout:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui
+  namespace: retail-app
+spec:
+  selector:
+    app: ui
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ui
+  namespace: retail-app
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  ingressClassName: alb
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ui
+                port:
+                  number: 80

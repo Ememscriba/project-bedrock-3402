@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: catalog
-          image: public.ecr.aws/aws-containers/retail-store-sample-catalog:0.7.0
+          image: public.ecr.aws/aws-containers/retail-store-sample-catalog:1.6.1
           ports:
             - containerPort: 8080
           env:
@@ -24,7 +24,7 @@ spec:
             - name: DB_READ_ENDPOINT
               value: "bedrock-mysql.cufyuakkkh0e.us-east-1.rds.amazonaws.com:3306"
             - name: DB_NAME
-              value: "orders"
+              value: "retailcatalog"
             - name: DB_USER
               value: "retail_admin"
             - name: DB_PASSWORD

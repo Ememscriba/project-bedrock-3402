@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: ui
-          image: public.ecr.aws/aws-containers/retail-store-sample-ui:0.7.0
+          image: public.ecr.aws/aws-containers/retail-store-sample-ui:1.6.1
           ports:
             - containerPort: 8080
           env:
@@ -59,6 +59,13 @@ spec:
   rules:
     - http:
         paths:
+          - path: /catalog
+            pathType: Prefix
+            backend:
+              service:
+                name: catalog
+                port:
+                  number: 8080
           - path: /
             pathType: Prefix
             backend:

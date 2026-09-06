@@ -21,12 +21,6 @@ http://k8s-retailap-ui-6039ab69e6-2089655454.us-east-1.elb.amazonaws.com
 kubectl apply -f k8s/retail-store.yaml
 kubectl apply -f k8s/backends.yaml
 ```
-
-## Generate Grading Data
-```bash
-cd terraform && terraform output -json > ../grading.json
-```
-
 ## Developer Credentials (bedrock-dev-view)
 - Access Key ID: AKIATGAQYK222PWUWO4C
 - Secret Access Key: (retrieve from terraform output)

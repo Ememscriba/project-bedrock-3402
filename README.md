@@ -1,7 +1,5 @@
 # Project Bedrock - InnovateMart EKS Deployment
 
-## Student ID: 3402
-
 ## Architecture
 - VPC: project-bedrock-vpc (us-east-1)
 - EKS Cluster: project-bedrock-cluster (v1.34)

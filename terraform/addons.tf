@@ -59,3 +59,12 @@ resource "aws_iam_role_policy_attachment" "lb_controller" {
   policy_arn = aws_iam_policy.lb_controller.arn
   role       = aws_iam_role.lb_controller.name
 }
+
+resource "aws_eks_addon" "metrics_server" {
+  cluster_name = aws_eks_cluster.bedrock.name
+  addon_name   = "metrics-server"
+
+  depends_on = [
+    aws_eks_node_group.bedrock_nodes
+  ]
+}

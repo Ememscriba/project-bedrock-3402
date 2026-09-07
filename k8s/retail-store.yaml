@@ -23,6 +23,13 @@ spec:
           image: public.ecr.aws/aws-containers/retail-store-sample-ui:1.6.1
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           env:
             - name: ENDPOINTS_CATALOG
               value: "http://catalog:8080"
@@ -54,10 +61,14 @@ metadata:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: PLACEHOLDER_ACM_ARN
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
 spec:
   ingressClassName: alb
   rules:
-    - http:
+    - host: store.saphigen.com
+      http:
         paths:
           - path: /catalog
             pathType: Prefix

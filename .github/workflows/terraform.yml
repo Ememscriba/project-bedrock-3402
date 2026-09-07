@@ -36,6 +36,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
+        id: plan
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform plan -no-color
         continue-on-error: true
@@ -81,3 +82,14 @@ jobs:
       - name: Terraform Apply
         working-directory: ${{ env.TF_WORKING_DIR }}
         run: terraform apply -auto-approve
+      - name: Get ALB URL
+        id: alb
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: |
+          sleep 60
+          URL=$(kubectl get ingress ui -n retail-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}' || echo "")
+          echo "url=$URL" >> $GITHUB_OUTPUT
+      - name: Smoke test
+        if: steps.alb.outputs.url != ''
+        run: |
+          curl -sf -o /dev/null -w "%{http_code}" http://${{ steps.alb.outputs.url }} | grep -q "200\|303" && echo "Smoke test passed" || (echo "Smoke test failed" && exit 1)

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: bedrock
+description: Bedrock retail platform - EKS-based microservices deployment
+type: application
+version: 1.0.0
+appVersion: "1.6.1"

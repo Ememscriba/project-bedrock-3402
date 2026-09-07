@@ -18,17 +18,39 @@ spec:
           image: public.ecr.aws/aws-containers/retail-store-sample-catalog:1.6.1
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           env:
             - name: DB_ENDPOINT
-              value: "bedrock-mysql.cufyuakkkh0e.us-east-1.rds.amazonaws.com:3306"
+              valueFrom:
+                secretKeyRef:
+                  name: catalog-db-credentials
+                  key: endpoint
             - name: DB_READ_ENDPOINT
-              value: "bedrock-mysql.cufyuakkkh0e.us-east-1.rds.amazonaws.com:3306"
+              valueFrom:
+                secretKeyRef:
+                  name: catalog-db-credentials
+                  key: endpoint
             - name: DB_NAME
-              value: "retailcatalog"
+              valueFrom:
+                secretKeyRef:
+                  name: catalog-db-credentials
+                  key: dbname
             - name: DB_USER
-              value: "retail_admin"
+              valueFrom:
+                secretKeyRef:
+                  name: catalog-db-credentials
+                  key: username
             - name: DB_PASSWORD
-              value: "BedrockSecureMySql2025!"
+              valueFrom:
+                secretKeyRef:
+                  name: catalog-db-credentials
+                  key: password
 ---
 apiVersion: v1
 kind: Service
@@ -62,6 +84,13 @@ spec:
           image: public.ecr.aws/aws-containers/retail-store-sample-cart:0.7.0
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           env:
             - name: RETAIL_CART_PERSISTENCE_PROVIDER
               value: "dynamodb"
@@ -102,6 +131,13 @@ spec:
           image: public.ecr.aws/aws-containers/retail-store-sample-orders:0.7.0
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           env:
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:postgresql://bedrock-postgres.cufyuakkkh0e.us-east-1.rds.amazonaws.com:5432/retailcatalog"
@@ -142,6 +178,13 @@ spec:
           image: public.ecr.aws/aws-containers/retail-store-sample-checkout:0.7.0
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
           env:
             - name: RETAIL_CHECKOUT_PERSISTENCE_PROVIDER
               value: "redis"

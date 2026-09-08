@@ -6,7 +6,7 @@ resource "aws_secretsmanager_secret_version" "catalog_db" {
   secret_id = aws_secretsmanager_secret.catalog_db.id
   secret_string = jsonencode({
     username = "retail_admin"
-    password = "BedrockSecureMySql2025!"
+    password = random_password.db_password.result
     endpoint = "bedrock-mysql.cufyuakkkh0e.us-east-1.rds.amazonaws.com:3306"
     dbname   = "retailcatalog"
   })
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "eso_assume_role" {
     condition {
       test     = "StringEquals"
       variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
-      values   = ["system:serviceaccount:external-secrets:external-secrets"]
+      values   = ["system:serviceaccount:external-secrets:external-secrets", "system:serviceaccount:retail-app:external-secrets"]
     }
   }
 }

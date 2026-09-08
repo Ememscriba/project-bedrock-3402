@@ -42,13 +42,13 @@ resource "aws_security_group" "db_sg" {
 resource "aws_ssm_parameter" "mysql_pass" {
   name  = "/retail-app/mysql/password"
   type  = "SecureString"
-  value = "BedrockSecureMySql2025!"
+  value = random_password.db_password.result
 }
 
 resource "aws_ssm_parameter" "postgres_pass" {
   name  = "/retail-app/postgres/password"
   type  = "SecureString"
-  value = "BedrockSecurePostgres2025!"
+  value = random_password.postgres_password.result
 }
 
 resource "aws_db_instance" "mysql" {
@@ -100,4 +100,16 @@ resource "aws_dynamodb_table" "carts" {
   tags = {
     Name = "bedrock-carts-table"
   }
+}
+
+resource "random_password" "db_password" {
+  length  = 20
+  special = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+resource "random_password" "postgres_password" {
+  length  = 20
+  special = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
 }
